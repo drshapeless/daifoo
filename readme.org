@@ -1,0 +1,69 @@
+#+title: readme
+
+* What is daifoo
+Daifoo is the name of traditional doctor in ancient China, which is my
+profession. This project, however, has nothing to do with
+medicine. Instead, it is my journey to learn about computer graphics
+and game engine logic.
+
+I just could not think of a better name.
+
+* Low level
+This project demonstrate how a novice programmer learns about making
+games both practically and conceptually.
+
+I will try avoid abstracted library. And the original program is
+written in C.
+
+* Self entertainment
+This project is for my self only. But in order to be future proof,
+which allows the future me to be able to understand what I have done,
+I will explain as detailed as possible.
+
+I do not have much time to play with this project because of my busy
+clinical life.
+
+* Convention
+
+** Git commit
+Every commit must be compiled. The commit comment must be straightly
+formatted. Each of them should be prefixed with an action, such as
+"Add", "Update", "Remove", "Fix", usually a verb. Do NOT add full stop
+to git commit. Extra description could be added to each commit.
+
+** Naming
+Variables will be in snake_case. Functions will be in
+camelCase. Structs will be in PascalCase.
+
+Since there is no namespace in C, the sl_ prefix will be used in front
+of function when necessary.
+
+** Format
+There is a clang-format file, which derived from the linux kernel
+style. But using 8-wide tab as indentation is way too silly in game
+programming, I would just use 4 spaces instead. Also, opening curly
+brace should never has its own newline.
+
+** Documentation
+All the documentation are in org-mode, which is a plain text format.
+
+* Dependencies
+- SDL2 (once SDL3 is stable, SDL3 will be used)
+- Vulkan (potentially will be shifted to using WebGPU in the future)
+
+
+I am not using any third party build system like cmake or ninja, the
+build scripts would be hand-written makefile.
+
+* Language
+No garbage collected language will be used. The project will starts
+with C, may eventually shift to using Zig. Occasionally, some Rust
+code may be used.
+
+* Target platform
+Since I only have Linux and macOS on hand, these two platforms should
+be able to run all the code in the project.
+
+Since I am using cross-platform low-level library like SDL2, Windows
+port should not be that hard. But the build script is likely not
+available on Windows.
