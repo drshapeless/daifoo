@@ -1,0 +1,25 @@
+#+title: 0000-setup
+#+date: <2023-09-26> <2023-09-27>
+
+* System and package manager
+I use Arch Linux. So most of the dependencies are installed via
+pacman, or paru, which is an AUR helper.
+
+On macOS, just use homebrew.
+
+* Editor
+I use Emacs as the text editor, nothing else. I use eglot for lsp support.
+
+* Compiler
+- clang
+
+* Install required packages via package manager
+Arch
+#+begin_src shell
+  paru -S clang vulkan-devel sdl2
+#+end_src
+
+macOS (clang is already installed on macOS, usually with xcode)
+#+begin_src shell
+  brew install vulkan sdl2
+#+end_src
