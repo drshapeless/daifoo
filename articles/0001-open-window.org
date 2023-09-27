@@ -1,8 +1,33 @@
 #+title: 0001-open-window
 #+date: <2023-09-26> <2023-09-27>
 
-* Opening a window
+* Project layout
+Let's create a directory call ~daifoo~.
+
+The project layout will be something like this.
+#+begin_src shell
+  tree
+  .
+  ├── LICENSE
+  ├── articles
+  ├── bin
+  ├── makefile
+  ├── readme.org
+  └── src
+      ├── main.c
+      └── makefile
+
+#+end_src
+
+Create a ~src~ directory.
+#+begin_src shell
+  mkdir src
+#+end_src
+
+* Source code
 Refer to this. https://glusoft.com/sdl2-tutorials/install-sdl-linux/
+
+Create ~main.c~ in ~src~.
 #+begin_src c
   #include <SDL2/SDL.h>
   #include <SDL2/SDL_error.h>
@@ -48,3 +73,93 @@ Refer to this. https://glusoft.com/sdl2-tutorials/install-sdl-linux/
       return 0;
   }
 #+end_src
+
+* Makefile
+Compile the file.
+#+begin_src shell
+  clang -lSDL2 -o daifoo main.c
+#+end_src
+
+I assume you already understand how to compile a file and link it with
+a library. This is universal on Linux and macOS.
+
+I don't want to type this long everytime. So it is better to write a
+makefile. Some people prefers using cmake or ninja, but learning those
+tools requires an considerable amount of effort. For the sake of
+focusing on writing game, forget about that.
+
+Create a ~makefile~ in src. (Some people prefer ~Makefile~, since it will
+be closer to README because of the capital M, I don't give a fuck, my
+readme is even in lowercase.)
+#+begin_src makefile
+  CC = clang
+  CFLAGS = $(shell sdl2-config --libs)
+  binary_name = daifoo
+  objects = main.o
+
+  $(binary_name): $(objects)
+        $(CC) $(CFLAGS) -o $(binary_name) $(objects)
+
+  .PHONY: clean
+  clean:
+        -rm $(binary_name) $(objects)
+#+end_src
+
+There are a few things going on in the makefile. Assume you know the
+basics of makefile, I pick a few important things to explain.
+
+Usually, when people are compiling with sdl2, they will use this kind
+of command.
+#+begin_src shell
+  cc -o target main.c `sdl2-config --cflags --libs`
+#+end_src
+
+Let's see what the ~sdl2-config~ command gives us.
+#+begin_src shell
+  # On macOS
+  sdl2-config --cflags
+  -I/opt/homebrew/include/SDL2 -D_THREAD_SAFE
+
+  sdl2-config --libs
+  -L/opt/homebrew/lib -lSDL2
+#+end_src
+
+Since /opt/homebrew/include is already in my include path, I do not
+need the --cflags output, therefore I discard it.
+
+In most the case, you may even get away with this, assuming everything
+is set up correctly.
+#+begin_src shell
+  cc -lSDL2 -o target main.c
+#+end_src
+
+This makefile uses implicit rules for .o compilation, therefore, we
+can omit this line.
+#+begin_src makefile
+  main.o: main.c
+        cc -c main.c
+#+end_src
+
+Go back to the root of project, create another ~makefile~.
+#+begin_src makefile
+  daifoo:
+        $(MAKE) -w -C src; cp src/daifoo bin/
+
+  .PHONY: clean
+  clean:
+        $(MAKE) -w -C src clean
+
+#+end_src
+
+What it does is just to call make in the ~src~ directory. Copy the
+binary to bin.
+
+* Compile and run
+Finally, we can call ~make~ at the root directory. The binary will be at
+bin/daifoo.
+#+begin_src shell
+  make
+  ./bin/daifoo
+#+end_src
+
+It should show a window for 2 second and quit itself.
