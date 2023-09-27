@@ -14,12 +14,37 @@ I use Emacs as the text editor, nothing else. I use eglot for lsp support.
 - clang
 
 * Install required packages via package manager
-Arch
+
+** Linux
+Arch with paru, you may use pacman.
 #+begin_src shell
   paru -S clang vulkan-devel sdl2
 #+end_src
-
-macOS (clang is already installed on macOS, usually with xcode)
+** macOS
+clang is already installed on macOS, usually with xcode
 #+begin_src shell
-  brew install vulkan sdl2
+  brew install sdl2
 #+end_src
+
+Do not use the homebrew formula of vulkan, that is unmaintained,
+mostly due to some license changed.
+
+Download the sdk from the official website. (It sounds silly.)
+https://vulkan.lunarg.com/sdk/home
+
+Follow the instructions of the dmg, I installed the sdk on the home
+directory.
+
+Test whether it works.
+
+In the sdk, go to Application. Try to run ~vkcube~.
+
+If you can see a rotating cube in a window, you are good.
+
+Navigate to the root of the sdk, there is a python script for
+installation. Run it, with sudo. (Take your risk.)
+#+begin_src shell
+  sudo python3 install_vulkan.py
+#+end_src
+
+All the necessary things are installed to the right position.
