@@ -1,8 +1,6 @@
-binary_name = daifoo
-bin = ./bin/
+daifoo:
+	$(MAKE) -w -C src; cp src/daifoo bin/
 
-run: $(binary_name)
-	./bin/$(binary_name)
-
-$(binary_name): ./src/main.c
-	clang -o $(bin)$(binary_name) ./src/main.c `sdl2-config --cflags --libs`
+.PHONY: clean
+clean:
+	$(MAKE) -w -C src clean
