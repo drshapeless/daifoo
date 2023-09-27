@@ -1,1 +1,3 @@
 /bin/
+/src/daifoo
+/src/*.o
