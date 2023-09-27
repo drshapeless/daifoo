@@ -15,7 +15,7 @@ int main(int argc, char *argv[]) {
 
     SDL_Window *window = SDL_CreateWindow("daifoo", SDL_WINDOWPOS_UNDEFINED,
                                           SDL_WINDOWPOS_UNDEFINED, WINDOW_WIDTH,
-                                          WINDOW_HEIGHT, 0);
+                                          WINDOW_HEIGHT, SDL_WINDOW_SHOWN);
 
     if (window == NULL) {
         printf("SDL_CreateWindow Error: %s\n", SDL_GetError());
