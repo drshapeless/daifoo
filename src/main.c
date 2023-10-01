@@ -1,3 +1,5 @@
+#include "logger.h"
+
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_error.h>
 #include <SDL2/SDL_render.h>
@@ -9,7 +11,7 @@
 
 int main(int argc, char *argv[]) {
     if (SDL_Init(SDL_INIT_VIDEO) != 0) {
-        printf("SDL_Init Error:%s\n", SDL_GetError());
+        FATAL("SDL_Init Error:%s", SDL_GetError());
         return 1;
     }
 
@@ -18,14 +20,14 @@ int main(int argc, char *argv[]) {
                                           WINDOW_HEIGHT, SDL_WINDOW_SHOWN);
 
     if (window == NULL) {
-        printf("SDL_CreateWindow Error: %s\n", SDL_GetError());
+        FATAL("SDL_CreateWindow Error: %s", SDL_GetError());
         return 1;
     }
 
     SDL_Renderer *renderer =
         SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
     if (renderer == NULL) {
-        printf("SDL_CreateRenderer Error: %s\n", SDL_GetError());
+        FATAL("SDL_CreateRenderer Error: %s", SDL_GetError());
         return 1;
     }
 

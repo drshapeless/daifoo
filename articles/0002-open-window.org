@@ -29,6 +29,8 @@ Refer to this. https://glusoft.com/sdl2-tutorials/install-sdl-linux/
 
 Create ~main.c~ in ~src~.
 #+begin_src c
+  #include "logger.h"
+
   #include <SDL2/SDL.h>
   #include <SDL2/SDL_error.h>
   #include <SDL2/SDL_render.h>
@@ -40,23 +42,23 @@ Create ~main.c~ in ~src~.
 
   int main(int argc, char *argv[]) {
       if (SDL_Init(SDL_INIT_VIDEO) != 0) {
-          printf("SDL_Init Error:%s\n", SDL_GetError());
+          FATAL("SDL_Init Error:%s", SDL_GetError());
           return 1;
       }
 
       SDL_Window *window = SDL_CreateWindow("daifoo", SDL_WINDOWPOS_UNDEFINED,
                                             SDL_WINDOWPOS_UNDEFINED, WINDOW_WIDTH,
-                                            WINDOW_HEIGHT, 0);
+                                            WINDOW_HEIGHT, SDL_WINDOW_SHOWN);
 
       if (window == NULL) {
-          printf("SDL_CreateWindow Error: %s\n", SDL_GetError());
+          FATAL("SDL_CreateWindow Error: %s", SDL_GetError());
           return 1;
       }
 
       SDL_Renderer *renderer =
           SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
       if (renderer == NULL) {
-          printf("SDL_CreateRenderer Error: %s\n", SDL_GetError());
+          FATAL("SDL_CreateRenderer Error: %s", SDL_GetError());
           return 1;
       }
 
@@ -95,7 +97,7 @@ readme is even in lowercase.)
   CC = clang
   CFLAGS = $(shell sdl2-config --libs)
   binary_name = daifoo
-  objects = main.o
+  objects = main.o logger.o
 
   $(binary_name): $(objects)
         $(CC) $(CFLAGS) -o $(binary_name) $(objects)
