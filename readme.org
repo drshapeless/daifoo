@@ -32,11 +32,11 @@ formatted. Each of them should be prefixed with an action, such as
 to git commit. Extra description could be added to each commit.
 
 ** Naming
-Variables will be in snake_case. Functions will be in
-camelCase. Structs will be in PascalCase.
+Variables and functions will be in snake_case. Structs and enums will
+be in PascalCase.
 
-Since there is no namespace in C, the sl_ prefix will be used in front
-of function when necessary.
+Since there is no namespace in C, the sl_ or SL prefix will be used in
+front of function when necessary.
 
 ** Format
 There is a clang-format file, which derived from the linux kernel
