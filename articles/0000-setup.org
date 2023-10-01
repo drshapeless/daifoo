@@ -48,3 +48,46 @@ installation. Run it, with sudo. (Take your risk.)
 #+end_src
 
 All the necessary things are installed to the right position.
+
+* Primitive types
+In C, we have to memorize a lot of types and its associated size. Most
+modern languages now use something like u32, i32 to represent an
+integer signed and unsigned respectively. We can also achieve this in
+C, by have a simple header.
+
+This is inspired by the kohi game
+engine. https://github.com/travisvroman/kohi/blob/main/engine/src/defines.h
+
+Create ~define.h~ at src.
+#+begin_src c
+  #ifndef DEFINE_H
+  #define DEFINE_H
+
+  typedef unsigned char u8;
+  typedef unsigned short u16;
+  typedef unsigned int u32;
+  typedef unsigned long long u64;
+
+  typedef char i8;
+  typedef short i16;
+  typedef int i32;
+  typedef long long i64;
+
+  typedef float f32;
+  typedef double f64;
+
+  typedef char b8;
+  typedef int b32;
+
+  #define true 1
+  #define false 0
+
+  #endif /* DEFINE_H */
+#+end_src
+
+The #ifndef block is necessary to ensure the header is only included
+once. Nowadays, people like to use "#pragma once" instead, but both
+could work.
+
+Later, we will have some platform detection flags in define.h. For
+now, just some types.
