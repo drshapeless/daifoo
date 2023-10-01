@@ -67,3 +67,11 @@ be able to run all the code in the project.
 Since I am using cross-platform low-level library like SDL2, Windows
 port should not be that hard. But the build script is likely not
 available on Windows.
+
+* PS
+The project presents my way to write a game from scratch without
+knowing how a game engine works. The code is almost guarantee to be
+spaghetti because I have no experience and knowledge.
+
+This may act as a good resource to see how a man learn his tool from
+scratch.
