@@ -1,3 +1,4 @@
 /bin/
 /src/daifoo
 /src/*.o
+/src/test
