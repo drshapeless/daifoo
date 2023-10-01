@@ -1,4 +1,4 @@
-#+title: 0001-open-window
+#+title: 0002-open-window
 #+date: <2023-09-26> <2023-09-27>
 
 * Project layout

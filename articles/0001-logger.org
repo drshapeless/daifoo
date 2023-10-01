@@ -1,0 +1,134 @@
+#+title: 0001-logger
+#+date: <2023-09-28> <2023-10-01>
+
+* Why not printf
+There are roughly two types of debugging, one uses the debugger, which
+may comes along with their IDE, like visual studio, the others use
+printf.
+
+I am one of the latter. Because I don't use an IDE, I write code in
+Emacs, there isn't a debugger built-in. I may use gdb, but using gdb
+is kind of annoying for my small projects. The only time I found gdb
+useful is when I was writing a little game, which I accidentally free
+the sprite before rendering.
+
+Using printf is a casual way of putting words to stdout and hope that
+the place I print something is the place goes wrong. In my previous
+experience, as a self-taught coding monkey, I usually print something
+like "bello" and "banana" in the place I suspect to goes wrong.
+
+This is a bad habit. With a logger, hopefully I can improve.
+
+* Designing a logger
+Usually, a logger consists of log levels and output file. I used to
+use a output file. Then I change back to stdout and stderr, then pipe
+the outputs into files when initializing the application. This kind of
+works in web applications, but for performance intensive game
+development, frequently taking with io is expensive.
+
+For now, our logger still uses stdout and stderr, later I will add a
+buffer to enable spitting out logs in batches.
+
+* Debug level
+Just use the convention.
+
+1. fatal
+2. error
+3. warn
+4. info
+5. debug
+6. trace
+
+* Source code
+The code consists of a lot of macros to imply different log level.
+
+Create logger.h
+#+begin_src c
+  #ifndef LOGGER_H
+  #define LOGGER_H
+
+  #include "define.h"
+
+  #define LOG_WARN_ENABLED 1
+  #define LOG_INFO_ENABLED 1
+  #define LOG_DEBUG_ENABLED 1
+  #define LOG_TRACE_ENABLED 1
+
+  #if SL_RELEASE == 1
+  #define LOG_DEBUG_ENABLED 0
+  #define LOG_TRACE_ENABLED 0
+  #endif
+
+  typedef enum LogLevel {
+      LOG_LEVEL_FATAL = 0,
+      LOG_LEVEL_ERROR = 0,
+      LOG_LEVEL_WARN = 0,
+      LOG_LEVEL_INFO = 0,
+      LOG_LEVEL_DEBUG = 0,
+      LOG_LEVEL_TRACE = 0,
+  } LogLevel;
+
+  void log_output(LogLevel level, const char *message, ...);
+
+  #define FATAL(message, ...) log_output(LOG_LEVEL_FATAL, message, __VA_ARGS__);
+  #define ERROR(message, ...) log_output(LOG_LEVEL_ERROR, message, __VA_ARGS__);
+
+  #if LOG_WARN_ENABLED == 1
+  #define WARN(message, ...) log_output(LOG_LEVEL_WARN, message, __VA_ARGS__);
+  #else
+  #define WARN(message, ...)
+  #endif
+
+  #if LOG_INFO_ENABLED == 1
+  #define INFO(message, ...) log_output(LOG_LEVEL_INFO, message, __VA_ARGS__);
+  #else
+  #define INFO(message, ...)
+  #endif
+
+  #if LOG_DEBUG_ENABLED == 1
+  #define DEBUG(message, ...) log_output(LOG_LEVEL_DEBUG, message, __VA_ARGS__);
+  #else
+  #define DEBUG(message, ...)
+  #endif
+
+  #if LOG_TRACE_ENABLED == 1
+  #define TRACE(message, ...) log_output(LOG_LEVEL_TRACE, message, __VA_ARGS__);
+  #else
+  #define TRACE(message, ...)
+  #endif
+
+  #endif /* LOGGER_H */
+#+end_src
+
+Create logger.c
+#+begin_src c
+  #include "logger.h"
+
+  #include <stdarg.h>
+  #include <stdio.h>
+  #include <string.h>
+
+  /* TODO: This function should be able to write to file in batch in the future. */
+  void log_output(LogLevel level, const char *message, ...) {
+      const char *level_strings[6] = { "FATAL: ", "ERROR: ", " WARN: ",
+                                       " INFO: ", "DEBUG: ", "TRACE: " };
+      b8 is_error = level < LOG_LEVEL_WARN;
+
+      /* TODO: This imposes a limit of 32000 to the message size, which
+         should not be a problem, but could be improve in the future. */
+      char out_message[32000];
+
+      va_list arg_ptr;
+      va_start(arg_ptr, message);
+      sprintf(out_message, message, arg_ptr);
+      va_end(arg_ptr);
+
+      sprintf(out_message, "%s%s\n", level_strings[level], out_message);
+
+      if (is_error) {
+          fprintf(stderr, "%s", out_message);
+      } else {
+          printf("%s", out_message);
+      }
+  }
+#+end_src
